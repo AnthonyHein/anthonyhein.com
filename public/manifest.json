@@ -1,0 +1,25 @@
+{
+  "short_name": "Anthony Hein",
+  "name": "Anthony Hein",
+  "icons": [
+    {
+      "src": "https://anthony-hein-web-assets.s3.amazonaws.com/images/profile.jpg",
+      "sizes": "64x64 32x32 24x24 16x16",
+      "type": "image/jpeg"
+    },
+    {
+      "src": "https://anthony-hein-web-assets.s3.amazonaws.com/images/profile.jpg",
+      "type": "image/jpeg",
+      "sizes": "192x192"
+    },
+    {
+      "src": "https://anthony-hein-web-assets.s3.amazonaws.com/images/profile.jpg",
+      "type": "image/jpeg",
+      "sizes": "512x512"
+    }
+  ],
+  "start_url": ".",
+  "display": "standalone",
+  "theme_color": "#1E2A45",
+  "background_color": "#1E2A45"
+}
