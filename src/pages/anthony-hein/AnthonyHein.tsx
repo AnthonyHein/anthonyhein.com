@@ -582,6 +582,10 @@ export default function AnthonyHein(): JSX.Element {
                   arrow
                   leaveDelay={2000}
                   placement="right"
+                  classes={{
+                    arrow: classes.arrowLight,
+                    tooltip: classes.tooltipLight,
+                  }}
                   interactive
                   disableFocusListener
                   title="Woah. Can't give my number out too easily: Akkb pz e wevf stnkpguafsh unuaioci dlvq glvp pyufvdhampn eug hxy albt vlduxu tstt suokwl kidrcwwkxu asplw zkqdsk ff afsh vx klgpdi pw dnjhyte mu icla kidrcwwkxu asplw drtt ilxuev dkgw aoise mz pqal aiyt wv wjja px dar shcau alf peawgauz sg tll ngh domdh lhv c vvkymavpwa xm aio liawgaz."

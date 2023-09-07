@@ -146,6 +146,13 @@ const useStyles = makeStyles((theme) => ({
       color: "#AD5C51",
     },
   },
+  arrowLight: {
+    color: theme.customPalette.light,
+  },
+  tooltipLight: {
+    backgroundColor: theme.customPalette.light,
+    color: theme.customPalette.primary,
+  },
   one: {
     width: "8.33%",
   },
