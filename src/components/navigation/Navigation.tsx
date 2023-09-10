@@ -30,8 +30,8 @@ export default function Navigation(): JSX.Element {
           <ListItem
             button
             component={Link}
-            to="#intro"
-            key="intro"
+            to="/home"
+            key="home"
             scroll={(el: any) => scrollWithOffset(el)}
             style={{
               paddingLeft: "0.5rem",

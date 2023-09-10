@@ -19,7 +19,6 @@ const useStyles = makeStyles((theme) => ({
   footerText: {
     color: theme.customPalette.light,
     fontSize: "0.75rem",
-    letterSpacing: 1.1,
   },
 }));
 

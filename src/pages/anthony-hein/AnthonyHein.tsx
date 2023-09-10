@@ -1,6 +1,9 @@
 import React from "react";
 
-import { Theme, Tooltip, Typography, Button, Link } from "@material-ui/core";
+import { Tooltip, Typography, Button, Link } from "@material-ui/core";
+
+import { doc, getDoc } from "firebase/firestore";
+import { db } from "../../firebase";
 
 import DescriptionIcon from "@material-ui/icons/Description";
 import BusinessCenterIcon from "@material-ui/icons/BusinessCenter";
@@ -15,7 +18,7 @@ import FacebookIcon from "@material-ui/icons/Facebook";
 import TwitterIcon from "@material-ui/icons/Twitter";
 import PhoneIcon from "@material-ui/icons/Phone";
 
-import themes, { Color } from "../../config/themes";
+import { Color } from "../../config/themes";
 
 import {
   load,
@@ -28,22 +31,19 @@ import Section from "../../components/section/Section";
 import SectionHeader from "../../components/section-header/SectionHeader";
 import Flashlight from "../../components/flashlight/Flashlight";
 
-import introductionData from "./introductionData";
-import schoolData from "./schoolData";
-import skillsData from "./skillsData";
-import leadershipData from "./leadershipData";
-import workData from "./workData";
-import projectData from "./projectData";
+import { Introduction } from "./introductionData";
+import { School } from "./schoolData";
+import { SkillSection } from "./skillData";
+import { Leadership } from "./leadershipData";
+import { Work } from "./workData";
+import { Project } from "./projectData";
 
 import { useAppDispatch, useAppSelector } from "../../state/hooks";
 import useStyles from "./style";
 
 export default function AnthonyHein(): JSX.Element {
-  const [openCellDialog, setOpenCellDialog] = React.useState(false);
-
   const dispatch = useAppDispatch();
   const activeMember = useAppSelector((state) => state.navigation.activeMember);
-  const activeTheme = useAppSelector((state) => state.navigation.activeTheme);
   dispatch(setMember("Anthony Hein"));
   dispatch(setPage("anthony-hein"));
   dispatch(setTheme("anthony-hein"));
@@ -52,8 +52,79 @@ export default function AnthonyHein(): JSX.Element {
 
   const width = useAppSelector((state) => state.app.width);
 
-  const theme: Theme = themes[activeTheme];
   const classes = useStyles();
+
+  const [introductionData, setIntroductionData] = React.useState<Introduction>({
+    paragraphs: ["<i>Loading ...</i>"],
+  });
+  const [leadershipData, setLeadershipData] = React.useState<Leadership[]>([]);
+  const [projectData, setProjectData] = React.useState<Project[]>([]);
+  const [schoolData, setSchoolData] = React.useState<School[]>([]);
+  const [skillData, setSkillData] = React.useState<SkillSection[]>([]);
+  const [workData, setWorkData] = React.useState<Work[]>([]);
+
+  const fetchData = async () => {
+    await getDoc(doc(db, "resume", "introductionData")).then((response) => {
+      if (!response.exists()) {
+        return;
+      }
+
+      const newIntroductionData: Introduction = {
+        paragraphs: response.data().paragraphs,
+      };
+
+      setIntroductionData(newIntroductionData);
+    });
+
+    await getDoc(doc(db, "resume", "leadershipData")).then((response) => {
+      if (!response.exists()) {
+        return;
+      }
+
+      console.log(response.data().leaderships);
+      setLeadershipData(response.data().leaderships);
+    });
+
+    await getDoc(doc(db, "resume", "projectData")).then((response) => {
+      if (!response.exists()) {
+        return;
+      }
+
+      console.log(response.data().projects);
+      setProjectData(response.data().projects);
+    });
+
+    await getDoc(doc(db, "resume", "schoolData")).then((response) => {
+      if (!response.exists()) {
+        return;
+      }
+
+      console.log(response.data().schools);
+      setSchoolData(response.data().schools);
+    });
+
+    await getDoc(doc(db, "resume", "skillData")).then((response) => {
+      if (!response.exists()) {
+        return;
+      }
+
+      console.log(response.data().skills);
+      setSkillData(response.data().skills);
+    });
+
+    await getDoc(doc(db, "resume", "workData")).then((response) => {
+      if (!response.exists()) {
+        return;
+      }
+
+      console.log(response.data().work);
+      setWorkData(response.data().work);
+    });
+  };
+
+  React.useEffect(() => {
+    fetchData();
+  }, []);
 
   return (
     <>
@@ -101,15 +172,7 @@ export default function AnthonyHein(): JSX.Element {
                 className={width > 800 ? classes.eight : classes.twelve}
                 style={{ marginRight: "auto" }}
               >
-                <Typography className={classes.body}>
-                  <div
-                    dangerouslySetInnerHTML={{
-                      __html: introductionData.tagline,
-                    }}
-                  ></div>
-                </Typography>
-                <br />
-                {introductionData.body.map((paragraph) => {
+                {introductionData.paragraphs.map((paragraph, i) => {
                   return (
                     <>
                       <Typography className={classes.body}>
@@ -119,15 +182,14 @@ export default function AnthonyHein(): JSX.Element {
                           }}
                         ></div>
                       </Typography>
-                      <br />
+                      {i < introductionData.paragraphs.length - 1 ? (
+                        <br />
+                      ) : (
+                        <></>
+                      )}
                     </>
                   );
                 })}
-                <Typography className={classes.body}>
-                  <div
-                    dangerouslySetInnerHTML={{ __html: introductionData.outro }}
-                  ></div>
-                </Typography>
                 <div style={{ display: "flex" }}>
                   <Button
                     className={`${classes.backgroundSecondary} ${classes.btn}`}
@@ -371,7 +433,7 @@ export default function AnthonyHein(): JSX.Element {
               }
             />
 
-            {skillsData.map((skillSection) => {
+            {skillData.map((skillSection) => {
               return (
                 <>
                   <Typography

@@ -42,6 +42,13 @@ function App(): JSX.Element {
         <Section color={Color.light} content={<Navigation />} skinny={true} />
       </div>
       <Switch>
+        <Route
+          path="/home"
+          component={() => {
+            window.location.href = "https://www.anthonyhein.com";
+            return null;
+          }}
+        />
         {routes.map((route) => (
           <Route
             key={route.path}
