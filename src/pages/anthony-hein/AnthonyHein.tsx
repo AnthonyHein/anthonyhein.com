@@ -81,7 +81,6 @@ export default function AnthonyHein(): JSX.Element {
         return;
       }
 
-      console.log(response.data().leaderships);
       setLeadershipData(response.data().leaderships);
     });
 
@@ -90,7 +89,6 @@ export default function AnthonyHein(): JSX.Element {
         return;
       }
 
-      console.log(response.data().projects);
       setProjectData(response.data().projects);
     });
 
@@ -99,7 +97,6 @@ export default function AnthonyHein(): JSX.Element {
         return;
       }
 
-      console.log(response.data().schools);
       setSchoolData(response.data().schools);
     });
 
@@ -108,7 +105,6 @@ export default function AnthonyHein(): JSX.Element {
         return;
       }
 
-      console.log(response.data().skills);
       setSkillData(response.data().skills);
     });
 
@@ -117,7 +113,6 @@ export default function AnthonyHein(): JSX.Element {
         return;
       }
 
-      console.log(response.data().work);
       setWorkData(response.data().work);
     });
   };
