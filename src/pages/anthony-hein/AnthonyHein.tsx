@@ -159,7 +159,7 @@ export default function AnthonyHein(): JSX.Element {
           <>
             <SectionHeader
               color={Color.primary}
-              id="intro"
+              id="introduction"
               content={<>Introduction</>}
             />
             <div style={{ display: "flex", justifyContent: "flex-start" }}>

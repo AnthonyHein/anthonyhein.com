@@ -12,7 +12,7 @@ export interface NavigationMember {
 const anthonyHeinLabels: NavigationSection[] = [
   {
     name: "Introduction",
-    slug: "Introduction",
+    slug: "introduction",
   },
   {
     name: "Education",

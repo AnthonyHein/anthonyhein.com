@@ -5,6 +5,6 @@ interface Route {
   exact: boolean;
   component: () => JSX.Element;
 }
-const routes: Route[] = [{ path: "/", exact: false, component: AnthonyHein }];
+const routes: Route[] = [{ path: "/", exact: true, component: AnthonyHein }];
 
 export default routes;
