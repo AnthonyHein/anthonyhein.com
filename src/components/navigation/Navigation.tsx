@@ -1,9 +1,13 @@
 import React from "react";
+
+import { useAppSelector, useAppDispatch } from "../../state/hooks";
+
+import useStylesNavigation from "./style";
+
+import navigationData from "./navigationData";
+
 import { ListItem, Typography } from "@material-ui/core";
 import { HashLink as Link } from "react-router-hash-link";
-import { useAppSelector, useAppDispatch } from "../../state/hooks";
-import navigationData from "./navigationData";
-import useStyles from "./style";
 
 export default function Navigation(): JSX.Element {
   const pageLoaded = useAppSelector((state) => state.navigation.pageLoaded);
@@ -12,7 +16,7 @@ export default function Navigation(): JSX.Element {
 
   const width = useAppSelector((state) => state.app.width);
 
-  const classes = useStyles();
+  const classesNavigation = useStylesNavigation();
 
   const scrollWithOffset = (el: any) => {
     const yCoordinate = el.getBoundingClientRect().top + window.pageYOffset;
@@ -25,26 +29,28 @@ export default function Navigation(): JSX.Element {
   }
   return (
     <>
-      <div className={classes.navigation}>
+      <div className={classesNavigation.navigation}>
         <div style={{ marginRight: "auto" }}>
-          <ListItem
-            button
-            component={Link}
-            to="/home"
-            key="home"
-            scroll={(el: any) => scrollWithOffset(el)}
-            style={{
-              paddingLeft: "0.5rem",
-              paddingRight: "0.5rem",
-            }}
+          <a
+            className={classesNavigation.invisibleLink}
+            href="https://www.anthonyhein.com"
+            target="_blank"
           >
-            <Typography className={classes.navigationText}>
-              {activeMember}
-            </Typography>
-          </ListItem>
+            <ListItem
+              button
+              style={{
+                paddingLeft: "0.5rem",
+                paddingRight: "0.5rem",
+              }}
+            >
+              <Typography className={classesNavigation.navigationText}>
+                {activeMember}
+              </Typography>
+            </ListItem>
+          </a>
         </div>
         {width > 960 ? (
-          <div className={classes.navigationItems}>
+          <div className={classesNavigation.navigationItems}>
             {navigationData.map((member) => {
               return (
                 <>
@@ -63,7 +69,9 @@ export default function Navigation(): JSX.Element {
                               paddingRight: "0.5rem",
                             }}
                           >
-                            <Typography className={classes.navigationText}>
+                            <Typography
+                              className={classesNavigation.navigationText}
+                            >
                               {navItem.name}
                             </Typography>
                           </ListItem>

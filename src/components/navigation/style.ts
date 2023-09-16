@@ -6,6 +6,12 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
     alignItems: "center",
   },
+  invisibleLink: {
+    color: "inherit",
+    "&:hover": {
+      color: "inherit",
+    },
+  },
   navigationText: {
     color: theme.customPalette.primary,
     textTransform: "uppercase",
