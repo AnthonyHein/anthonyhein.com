@@ -31,12 +31,12 @@ import Section from "../../components/section/Section";
 import SectionHeader from "../../components/section-header/SectionHeader";
 import Flashlight from "../../components/flashlight/Flashlight";
 
-import { Introduction } from "./introductionData";
-import { School } from "./schoolData";
-import { SkillSection } from "./skillData";
-import { Leadership } from "./leadershipData";
-import { Work } from "./workData";
-import { Project } from "./projectData";
+import defaultIntroductionData, { Introduction } from "./introductionData";
+import defaultSchoolData, { School } from "./schoolData";
+import defaultSkillData, { SkillSection } from "./skillData";
+import defaultLeadershipData, { Leadership } from "./leadershipData";
+import defaultWorkData, { Work } from "./workData";
+import defaultProjectData, { Project } from "./projectData";
 
 import { useAppDispatch, useAppSelector } from "../../state/hooks";
 import useStyles from "./style";
@@ -54,16 +54,25 @@ export default function AnthonyHein(): JSX.Element {
 
   const classes = useStyles();
 
-  const [introductionData, setIntroductionData] = React.useState<Introduction>({
-    paragraphs: ["<i>Loading ...</i>"],
-  });
-  const [leadershipData, setLeadershipData] = React.useState<Leadership[]>([]);
-  const [projectData, setProjectData] = React.useState<Project[]>([]);
-  const [schoolData, setSchoolData] = React.useState<School[]>([]);
-  const [skillData, setSkillData] = React.useState<SkillSection[]>([]);
-  const [workData, setWorkData] = React.useState<Work[]>([]);
+  const [introductionData, setIntroductionData] = React.useState<Introduction>(
+    defaultIntroductionData
+  );
+  const [leadershipData, setLeadershipData] = React.useState<Leadership[]>(
+    defaultLeadershipData
+  );
+  const [projectData, setProjectData] =
+    React.useState<Project[]>(defaultProjectData);
+  const [schoolData, setSchoolData] =
+    React.useState<School[]>(defaultSchoolData);
+  const [skillData, setSkillData] =
+    React.useState<SkillSection[]>(defaultSkillData);
+  const [workData, setWorkData] = React.useState<Work[]>(defaultWorkData);
 
   const fetchData = async () => {
+    if (!process.env.NODE_ENV || process.env.NODE_ENV === "development") {
+      return;
+    }
+
     await getDoc(doc(db, "resume", "introductionData")).then((response) => {
       if (!response.exists()) {
         return;
@@ -74,6 +83,12 @@ export default function AnthonyHein(): JSX.Element {
       };
 
       setIntroductionData(newIntroductionData);
+
+      var s = "";
+      for (const paragraph of newIntroductionData.paragraphs) {
+        s += '"' + paragraph.replaceAll('"', '\\"') + '",';
+      }
+      console.log(s);
     });
 
     await getDoc(doc(db, "resume", "leadershipData")).then((response) => {
@@ -82,6 +97,23 @@ export default function AnthonyHein(): JSX.Element {
       }
 
       setLeadershipData(response.data().leaderships);
+
+      var s = "";
+      for (const leadership of response.data().leaderships) {
+        s += "{";
+        s +=
+          'organization: "' +
+          leadership.organization.replaceAll('"', '\\"') +
+          '",';
+        s += 'date: "' + leadership.date.replaceAll('"', '\\"') + '",';
+        s += 'role: "' + leadership.role.replaceAll('"', '\\"') + '",';
+        s +=
+          'description: "' +
+          leadership.description.replaceAll('"', '\\"') +
+          '",';
+        s += "},";
+      }
+      console.log(s);
     });
 
     await getDoc(doc(db, "resume", "projectData")).then((response) => {
@@ -90,6 +122,26 @@ export default function AnthonyHein(): JSX.Element {
       }
 
       setProjectData(response.data().projects);
+
+      var s = "";
+      for (const project of response.data().projects) {
+        s += "{";
+        s += 'name: "' + project.name.replaceAll('"', '\\"') + '",';
+        s += 'link: "' + project.link.replaceAll('"', '\\"') + '",';
+        s += 'date: "' + project.date.replaceAll('"', '\\"') + '",';
+        s += "tools: [";
+        for (const tool of project.tools) {
+          s += '"' + tool.replaceAll('"', '\\"') + '",';
+        }
+        s += "],";
+        s += "descriptions: [";
+        for (const description of project.descriptions) {
+          s += '"' + description.replaceAll('"', '\\"') + '",';
+        }
+        s += "],";
+        s += "},";
+      }
+      console.log(s);
     });
 
     await getDoc(doc(db, "resume", "schoolData")).then((response) => {
@@ -98,6 +150,49 @@ export default function AnthonyHein(): JSX.Element {
       }
 
       setSchoolData(response.data().schools);
+
+      var s = "";
+      for (const school of response.data().schools) {
+        s += "{";
+        s += 'name: "' + school.name.replaceAll('"', '\\"') + '",';
+        s +=
+          'cumulativeGPA: "' +
+          school.cumulativeGPA.replaceAll('"', '\\"') +
+          '",';
+        s += 'attended: "' + school.attended.replaceAll('"', '\\"') + '",';
+        if (school.degree) {
+          s += "degree: {";
+          s += 'text: "' + school.degree.text.replaceAll('"', '\\"') + '",';
+          if (school.degree.link) {
+            s += 'link: "' + school.degree.link.replaceAll('"', '\\"') + '",';
+          }
+          s += "},";
+        }
+        if (school.minors) {
+          s += "minors: [";
+          for (const minor of school.minors) {
+            s += "{";
+            s += 'text: "' + minor.text.replaceAll('"', '\\"') + '",';
+            if (minor.link) {
+              s += 'link: "' + minor.link.replaceAll('"', '\\"') + '",';
+            }
+            s += "},";
+          }
+          s += "],";
+        }
+        s += "honors: [";
+        for (const honor of school.honors) {
+          s += "{";
+          s += 'text: "' + honor.text.replaceAll('"', '\\"') + '",';
+          if (honor.link) {
+            s += 'link: "' + honor.link.replaceAll('"', '\\"') + '",';
+          }
+          s += "},";
+        }
+        s += "],";
+        s += "},";
+      }
+      console.log(s);
     });
 
     await getDoc(doc(db, "resume", "skillData")).then((response) => {
@@ -106,6 +201,21 @@ export default function AnthonyHein(): JSX.Element {
       }
 
       setSkillData(response.data().skills);
+
+      var s = "";
+      for (const skillSection of response.data().skills) {
+        s += "{";
+        s += 'name: "' + skillSection.name + '",';
+        s += "skills: [";
+        for (const skill of skillSection.skills) {
+          s += "{";
+          s += 'name: "' + skill.name + '",';
+          s += "},";
+        }
+        s += "],";
+        s += "},";
+      }
+      console.log(s);
     });
 
     await getDoc(doc(db, "resume", "workData")).then((response) => {
@@ -114,6 +224,26 @@ export default function AnthonyHein(): JSX.Element {
       }
 
       setWorkData(response.data().work);
+
+      var s = "";
+      for (const job of response.data().work) {
+        s += "{";
+        s += 'organization: "' + job.organization.replaceAll('"', '\\"') + '",';
+        s += 'date: "' + job.date.replaceAll('"', '\\"') + '",';
+        s += 'role: "' + job.role.replaceAll('"', '\\"') + '",';
+        s += "tools: [";
+        for (const tool of job.tools) {
+          s += '"' + tool.replaceAll('"', '\\"') + '",';
+        }
+        s += "],";
+        s += "descriptions: [";
+        for (const description of job.descriptions) {
+          s += '"' + description.replaceAll('"', '\\"') + '",';
+        }
+        s += "],";
+        s += "},";
+      }
+      console.log(s);
     });
   };
 
